@@ -45,7 +45,7 @@ def main():
     frame_number = motiondataset.getFrameNumber(seq_id) # get frame number of current file
 
     
-    modeldataset = ShapeDataset(model_path='./data/pointscloud/', model_class='chair', pts_num = 1024)
+    #modeldataset = ShapeDataset(model_path='./data/pointscloud/', model_class='chair', pts_num = 1024)
 
     # === Plot and animate ===
 
@@ -59,23 +59,7 @@ def main():
     # Plot the conditioning ground truth
     '''int(frame_number/2)'''
     for i in range(0, frame_number):
-        mid = modeldataset.getID(seq2model[i, 0], seq2model[i, 1])
-        print(mid)
-        # if mid != 0 and mid != 12:
-        #     continue
-        # if mid == 12:
-        #     print(model_trans[i])
-        # if mid == 0:
-        #     print(model_trans[i])
-        
-        # print(motiondataset.ExtractJointGlobalPosition(seq_id, i)[0])
-        ptcloud, _ = modeldataset[mid]
-        ptcloud = ptcloud.T
-        #ptcloud = ptcloud - np.mean(ptcloud, axis = 1, keepdims=True)
-        temp = np.concatenate((ptcloud, np.ones(shape=[1, ptcloud.shape[1]])), axis=0)
-        temp = np.matmul(model_trans[i], temp)
-        ptcloud = temp[:3, :] #+ np.expand_dims(roots[i, :].T, axis=1)
-        ob.update(motiondataset.ExtractJointGlobalPosition(seq_id, i), ptcloud, contacts[i, :, 1:])
+        ob.update(motiondataset.ExtractJointGlobalPosition(seq_id, i))
         plt.show(block=False)
         fig.canvas.draw()
         plt.pause(0.01)

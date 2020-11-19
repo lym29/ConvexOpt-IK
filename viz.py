@@ -29,12 +29,6 @@ class Ax3DPose(object):
 
     vals = np.zeros((23, 3)) # skeleton vals(joints,xyz)
 
-    model = np.zeros(shape=[3, 100])
-    self.pts_plot = self.ax.plot(model[0, :], model[1, :], model[2, :], c=rcolor, marker='o', linestyle = 'None')
-
-    descriptor = np.zeros(shape=[3, 3])
-    self.descriptor_plot = self.ax.plot(descriptor[:, 0], model[:, 1], model[:, 2], c='g', marker='o', linestyle = 'None')
-
     # Make connection matrix
     self.plots = []
     for i in np.arange( len(self.I) ):
@@ -52,7 +46,7 @@ class Ax3DPose(object):
     self.ax.set_ylim3d([0, 2])
   
   # refresh frame by frame of the pose
-  def update(self, vals, model, descriptors, lcolor="#3498db", rcolor="#e74c3c"):
+  def update(self, vals, lcolor="#3498db", rcolor="#e74c3c"):
     """
     Update the plotted 3d pose.
     Args
@@ -70,18 +64,6 @@ class Ax3DPose(object):
       self.plots[i][0].set_ydata(z)
       self.plots[i][0].set_3d_properties(y)
       self.plots[i][0].set_color(lcolor)
-
-    self.pts_plot[0].set_xdata(model[0, :])
-    self.pts_plot[0].set_ydata(model[2, :])
-    self.pts_plot[0].set_3d_properties(model[1, :])
-
-    self.descriptor_plot[0].set_xdata(descriptors[:, 0])
-    self.descriptor_plot[0].set_ydata(descriptors[:, 2])
-    self.descriptor_plot[0].set_3d_properties(descriptors[:, 1])
-    
-    model_min = np.min(model, axis=1)
-    model_max = np.max(model, axis=1)
-    model_center = (model_min + model_max)/2
     
     r = 1
     xroot, yroot, zroot = vals[0,0], vals[0,1], vals[0,2]
@@ -89,9 +71,5 @@ class Ax3DPose(object):
     self.ax.set_xlim3d([-r+xroot, r+xroot])
     self.ax.set_ylim3d([-r+zroot, r+zroot])
     self.ax.set_zlim3d([-r+yroot, r+yroot])
-    #self.ax.set_ylim3d([-1, 2])
-    # self.ax.set_xlim3d([-r+model_center[0], r+model_center[0]])
-    # self.ax.set_zlim3d([-r+model_center[1], r+model_center[1]])
-    # self.ax.set_ylim3d([-r+model_center[2], r+model_center[2]])
 
     self.ax.set_aspect('auto')
